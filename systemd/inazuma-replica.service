@@ -1,0 +1,15 @@
+# Read-only replica. No key, no stake, serves RPC and WebSocket publicly.
+[Unit]
+Description=Inazuma Core replica
+After=network-online.target
+
+[Service]
+ExecStart=/usr/local/bin/inazuma run --data /var/lib/inazuma-replica \
+  --genesis /etc/inazuma/genesis.json --replica \
+  --peers rpc.inazuma.network:9944 --rpc 0.0.0.0:9933 --ws 0.0.0.0:9955
+Restart=always
+RestartSec=2
+LimitNOFILE=65535
+
+[Install]
+WantedBy=multi-user.target
