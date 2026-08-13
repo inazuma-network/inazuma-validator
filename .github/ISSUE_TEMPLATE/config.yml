@@ -1,0 +1,5 @@
+blank_issues_enabled: false
+contact_links:
+  - name: Node / consensus bug
+    url: https://github.com/inazuma-network/inazuma-core/issues/new/choose
+    about: Anything in the node itself belongs in inazuma-core.
