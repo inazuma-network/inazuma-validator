@@ -1,0 +1,97 @@
+# Quickstart
+
+**Time:** ~20 minutes, mostly waiting for a compile.
+**Skills:** you can rent a server and paste commands. That's it.
+
+## What a validator is
+
+Inazuma produces a block every 400 ms. A validator is a small server that keeps a full
+copy of the chain, gets picked in turn to produce blocks (more stake = picked more
+often), votes on everyone else's blocks, and earns the fees and rewards for its own.
+
+Bond **1,000 INAZ** and you are in the rotation on the next block. No allowlist, no
+application.
+
+| Term | Plain English |
+| --- | --- |
+| Stake / bond | INAZ you lock so the network can punish you |
+| Slot | Your turn to produce a block |
+| Missed slot | Your turn came and your node didn't produce |
+| Jailed | Benched after too many missed slots. No stake burned. |
+| Slashed | Stake burned for provable cheating |
+| Tombstoned | Key banned forever — double-signing only |
+| Unbonding | 300-block wait before withdrawn stake is spendable |
+| Replica | Syncs and serves queries, never validates. No stake. |
+| Genesis | Block 0. Every node needs the identical file. |
+
+## 1. Install (easy)
+
+```bash
+curl -sSf https://raw.githubusercontent.com/inazuma-network/inazuma-validator/main/scripts/install-validator.sh | bash
+```
+
+Read it first if you prefer:
+
+```bash
+curl -sSfO https://raw.githubusercontent.com/inazuma-network/inazuma-validator/main/scripts/install-validator.sh
+less install-validator.sh
+bash install-validator.sh
+```
+
+It prints your address when done. Skip to step 3.
+
+## 2. Install (manual)
+
+```bash
+sudo apt update && sudo apt install -y build-essential curl git pkg-config
+curl https://sh.rustup.rs -sSf | sh -s -- -y && . "$HOME/.cargo/env"
+sudo ufw allow 9944/tcp
+
+git clone https://github.com/inazuma-network/inazuma-core.git
+cd inazuma-core && cargo build --release
+sudo install -m755 target/release/inazuma /usr/local/bin/inazuma
+
+inazuma keygen | tee ~/validator.txt && chmod 600 ~/validator.txt
+```
+
+Back the secret up offline now, and never run one key on two machines.
+
+Initialise from the network genesis, byte for byte:
+
+```bash
+sudo mkdir -p /etc/inazuma /var/lib/inazuma
+sudo cp genesis.json /etc/inazuma/genesis.json
+inazuma init --data /var/lib/inazuma --genesis /etc/inazuma/genesis.json
+```
+
+Sync before you stake — a validator elected while syncing gets jailed:
+
+```bash
+inazuma run --data /var/lib/inazuma --genesis /etc/inazuma/genesis.json \
+  --key <SECRET_HEX> --peers rpc.inazuma.network:9944 --rpc 127.0.0.1:9933
+inazuma status   # in another shell
+```
+
+Then run it under systemd — see [`systemd/inazuma.service`](../systemd/inazuma.service):
+
+```bash
+printf 'INAZ_KEY=<SECRET_HEX>\n' | sudo tee /etc/inazuma/validator.env >/dev/null
+sudo chmod 600 /etc/inazuma/validator.env
+sudo cp systemd/inazuma.service /etc/systemd/system/inazuma.service
+sudo systemctl daemon-reload && sudo systemctl enable --now inazuma
+journalctl -u inazuma -f
+```
+
+## 3. Bond your stake
+
+```bash
+inazuma status                                  # must say in sync
+inazuma stake --key <SECRET_HEX> --amount 1000
+inazuma validators
+```
+
+The leader keeps every fee in its block plus 20% commission on the block reward; the
+other 80% is split across the active set by stake and credited immediately — no claim
+transaction.
+
+Next: [operations](operations.md).
