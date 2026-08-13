@@ -1,0 +1,16 @@
+# Validator unit. Put INAZ_KEY=<SECRET_HEX> in /etc/inazuma/validator.env (mode 600).
+[Unit]
+Description=Inazuma Core validator
+After=network-online.target
+
+[Service]
+ExecStart=/usr/local/bin/inazuma run --data /var/lib/inazuma \
+  --genesis /etc/inazuma/genesis.json \
+  --key ${INAZ_KEY} --peers rpc.inazuma.network:9944 --rpc 127.0.0.1:9933
+EnvironmentFile=/etc/inazuma/validator.env
+Restart=always
+RestartSec=2
+LimitNOFILE=65535
+
+[Install]
+WantedBy=multi-user.target
