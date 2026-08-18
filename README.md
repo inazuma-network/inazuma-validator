@@ -7,6 +7,7 @@
 
 <p align="center">
   <a href="docs/quickstart.md">Quickstart</a> ·
+  <a href="docs/install-any-device.md">Install on any device</a> ·
   <a href="docs/operations.md">Operations</a> ·
   <a href="docs/slashing.md">Slashing</a> ·
   <a href="docs/troubleshooting.md">Troubleshooting</a> ·
@@ -22,7 +23,7 @@
 3. [Vocabulary — every term used in this repo](#3-vocabulary--every-term-used-in-this-repo)
 4. [Requirements, in full](#4-requirements-in-full)
 5. [Choosing and preparing a server](#5-choosing-and-preparing-a-server)
-6. [Install path A — one command](#6-install-path-a--one-command)
+6. [Install path A — one command](#6-install-path-a--one-command) · [Mac / Windows / Docker](docs/install-any-device.md)
 7. [Install path B — manual, step by step](#7-install-path-b--manual-step-by-step)
 8. [Getting INAZ and bonding stake](#8-getting-inaz-and-bonding-stake)
 9. [Rewards — how you get paid](#9-rewards--how-you-get-paid)

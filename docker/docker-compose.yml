@@ -1,0 +1,32 @@
+# One command, any operating system:
+#   docker compose up -d --build
+#
+# Validator?  put your secret in a .env file next to this file:
+#   INAZ_KEY=<secret hex>
+# Read-only replica (no key, no slashing risk):
+#   INAZ_ROLE=replica docker compose up -d --build
+services:
+  inazuma:
+    build:
+      context: ..
+      dockerfile: docker/Dockerfile
+    container_name: inazuma-node
+    restart: unless-stopped
+    environment:
+      INAZ_ROLE: ${INAZ_ROLE:-validator}
+      INAZ_KEY: ${INAZ_KEY:-}
+      INAZ_PEERS: ${INAZ_PEERS:-rpc.inazuma.network:9944}
+    ports:
+      - "9944:9944"          # P2P — must be reachable for inbound peers
+      - "127.0.0.1:9933:9933" # RPC — localhost only, never expose publicly
+    volumes:
+      - inazuma-data:/var/lib/inazuma
+    healthcheck:
+      test: ["CMD", "curl", "-sf", "-X", "POST", "-H", "content-type: application/json",
+             "--data", "{\"jsonrpc\":\"2.0\",\"id\":1,\"method\":\"inaz_blockNumber\"}",
+             "http://127.0.0.1:9933"]
+      interval: 30s
+      timeout: 5s
+      retries: 5
+volumes:
+  inazuma-data:

@@ -40,6 +40,18 @@ bash install-validator.sh
 
 It prints your address when done. Skip to step 3.
 
+### Not on Linux?
+
+| Device | Command |
+| --- | --- |
+| macOS | `curl -sSf https://raw.githubusercontent.com/inazuma-network/inazuma-validator/main/scripts/install-validator-mac.sh \| bash` |
+| Windows (PowerShell) | `irm https://raw.githubusercontent.com/inazuma-network/inazuma-validator/main/scripts/install-validator.ps1 \| iex` |
+| Docker (any OS) | `cd docker && docker compose up -d --build` |
+
+Full per-device notes, service commands and caveats: [install-any-device.md](install-any-device.md).
+Mac and Windows are for development and replicas — production stake belongs on a Linux
+server with a static IP.
+
 ## 2. Install (manual)
 
 ```bash
