@@ -9,6 +9,7 @@
   <a href="docs/quickstart.md">Quickstart</a> ·
   <a href="docs/install-any-device.md">Install on any device</a> ·
   <a href="docs/operations.md">Operations</a> ·
+  <a href="docs/logs.md">Logs</a> ·
   <a href="docs/slashing.md">Slashing</a> ·
   <a href="docs/troubleshooting.md">Troubleshooting</a> ·
   <a href="docs/faq.md">FAQ</a>
@@ -264,6 +265,19 @@ inazuma run --data /var/lib/inazuma --genesis /etc/inazuma/genesis.json \
 inazuma status      # in a second shell — wait until it says in sync
 ```
 
+When it starts you get Ethereum-client style logs (geth/lighthouse format) — one
+line per event, `key=value` fields, greppable in `journalctl`:
+
+```text
+INFO  [08-19|01:27:24.469] Starting Inazuma node                  chain=7777 datadir=/var/lib/inazuma validator=8cCbiPdq..Vw6u
+INFO  [08-19|01:27:32.512] Syncing chain segment                  number=1,402,900 target=1,404,120 progress=99.91% peers=2
+INFO  [08-19|01:27:40.507] Imported new chain segment             number=1,404,121 hash=9f2c81aa..a1c4 txs=3 peers=2 elapsed=6ms
+INFO  [08-19|01:27:48.507] Chain head updated                     number=1,404,141 finalized=1,404,109 peers=2 stake=40000 INAZ role=validator
+```
+
+Every message, field and filter is documented in [logs](docs/logs.md). Prefer the
+animated Inazuma HUD instead? Add `--ui hud`.
+
 `INAZ_KEY` in the environment works instead of `--key`, so the secret never enters shell
 history.
 
@@ -452,7 +466,8 @@ Or `INAZ_ROLE=replica bash install-validator.sh`, with
 | `inazuma bench --key … --count …` | Local load test |
 
 Useful `run` flags: `--peers`, `--peer-ids`, `--require-encrypted-p2p`, `--rpc`, `--ws`,
-`--replica`, `--data`, `--genesis`, `--key` (or `INAZ_KEY`).
+`--replica`, `--data`, `--genesis`, `--key` (or `INAZ_KEY`), `--ui hud` (animated HUD
+instead of the default Ethereum-style logs).
 
 ## 16. Files this repo installs
 
@@ -463,6 +478,7 @@ systemd/inazuma.service           validator unit template
 systemd/inazuma-replica.service   replica unit template
 docs/quickstart.md                shortest path from empty server to bonded validator
 docs/operations.md                monitoring, upgrades, hardening, replicas
+docs/logs.md                      reading the Ethereum-style node logs
 docs/slashing.md                  every penalty, with worked examples
 docs/troubleshooting.md           symptom → cause → fix table
 docs/faq.md                       the questions everyone asks

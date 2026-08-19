@@ -12,7 +12,9 @@ bonding anything.
 
 **Can I unstake whenever?** Yes; spendable after 300 blocks (~2 min).
 
-**Is my stake at risk if I'm just offline?** No burn on a first downtime offence.
+**Is my stake at risk if I'm just offline?** No. From block 1,400,000 downtime no
+longer jails or burns — like Ethereum, you only miss the rewards for the slots you
+were offline for, and your validator resumes automatically when it is back.
 
 **Do I need a domain or TLS?** Only for public RPC. A validator needs neither.
 

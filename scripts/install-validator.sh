@@ -132,7 +132,7 @@ cat <<DONE
 
   Address        $ADDRESS
   Service        systemctl status inazuma
-  Live log       journalctl -u inazuma -f
+  Live log       journalctl -u inazuma -f      # geth-style logs: INFO [MM-DD|HH:MM:SS] ...
   Sync progress  inazuma status
 
   NEXT: wait until 'inazuma status' says you are in sync (usually a few minutes),

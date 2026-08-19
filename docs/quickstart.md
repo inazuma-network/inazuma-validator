@@ -84,6 +84,19 @@ inazuma run --data /var/lib/inazuma --genesis /etc/inazuma/genesis.json \
 inazuma status   # in another shell
 ```
 
+When it starts you get Ethereum-client style logs (geth/lighthouse format) — one
+line per event, `key=value` fields, greppable in `journalctl`:
+
+```text
+INFO  [08-19|01:27:24.469] Starting Inazuma node                  chain=7777 datadir=/var/lib/inazuma validator=8cCbiPdq..Vw6u
+INFO  [08-19|01:27:32.512] Syncing chain segment                  number=1,402,900 target=1,404,120 progress=99.91% peers=2
+INFO  [08-19|01:27:40.507] Imported new chain segment             number=1,404,121 hash=9f2c81aa..a1c4 txs=3 peers=2 elapsed=6ms
+INFO  [08-19|01:27:48.507] Chain head updated                     number=1,404,141 finalized=1,404,109 peers=2 stake=40000 INAZ role=validator
+```
+
+Every message, field and filter is documented in [logs](logs.md). Prefer the
+animated Inazuma HUD instead? Add `--ui hud`.
+
 Then run it under systemd — see [`systemd/inazuma.service`](../systemd/inazuma.service):
 
 ```bash

@@ -116,7 +116,9 @@ c ""
 [ -n "${INAZ_ADDRESS:-}" ] && c "  your address:  ${INAZ_ADDRESS}"
 cat <<TXT
 
-  logs      tail -f ~/.inazuma/logs/node.log
+  logs      tail -f ~/.inazuma/logs/node.log      # geth-style: INFO [MM-DD|HH:MM:SS] ...
+  errors    grep -E "WARN|ERROR" ~/.inazuma/logs/node.log
+  hud       $BIN run --data ~/.inazuma/data --ui hud  # animated HUD instead of logs
   status    $BIN status
   stop      launchctl unload $PLIST
   start     launchctl load $PLIST
