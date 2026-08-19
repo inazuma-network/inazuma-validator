@@ -455,7 +455,9 @@ Or `INAZ_ROLE=replica bash install-validator.sh`, with
 | `inazuma keygen` | Create a keypair; prints address + secret |
 | `inazuma init --data … --genesis …` | Initialise a data directory from genesis |
 | `inazuma run …` | Run the node (validator or `--replica`) |
-| `inazuma status` | Height, sync state, missed-slot streak |
+| `inazuma status` | Height, finalized height, peers, mempool, sync state, and how far behind the network tip you are |
+| `inazuma status --rpc https://rpc.inazuma.network` | Same, but reads the public network instead of your own node |
+| `inazuma wallet-new` / `wallet-import --key …` / `wallet` | Create, import or inspect the saved wallet (address, balance, stake) |
 | `inazuma validators` | Active set, stake shares, next leader |
 | `inazuma stake --key … --amount …` | Bond stake and join the set |
 | `inazuma unstake --key … --amount …` | Start unbonding |
