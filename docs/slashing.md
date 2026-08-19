@@ -1,12 +1,17 @@
-# Slashing & jailing
+# Slashing (and why downtime no longer jails)
 
 Enforcement activates at block **130,000**, so earlier history replays unchanged.
+Downtime jailing was retired at block **1,400,000** — Ethereum-style liveness.
 
 | Offence | Detection | Penalty |
 | --- | --- | --- |
 | **Equivocation** — two blocks or precommits at one height | evidence verified against your signatures | burn `max(5%, 3 x stake share)`, **permanent tombstone** |
-| **Downtime** — 50 consecutive missed leader slots | counted on chain | jailed 10,000 blocks (~1 h), no burn; repeats burn 0.1% |
+| **Downtime** — missed leader slots (offline, sleeping laptop, behind) | counted on chain | **no jail, no burn** — you only lose the rewards for the slots you missed |
 | **Invalid block / bad state root** | peers reject it, never finalises | no burn, slot counted as missed |
+
+Since the 1,400,000 fork a validator keeps its seat while offline and starts
+earning again the moment it is caught up. `inazuma unjail` is only relevant to
+pre-fork history; downtime jails set before the fork are inert.
 
 Example: a validator with 20% of stake double-signs. `3 x 20% = 60%`, above the 5%
 floor, so 60% of its stake burns and the key is banned forever. A 1% validator loses

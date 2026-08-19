@@ -106,7 +106,7 @@ numbers.
 | **Stake / bond** | INAZ you lock so the network can punish you if you cheat |
 | **Slot** | Your turn to produce a block |
 | **Missed slot** | Your turn came and your node didn't produce — offline or behind |
-| **Jailed** | Temporarily benched after too many missed slots. **No stake burned.** |
+| **Jailed** | Legacy state. Downtime jailing was retired at block 1,400,000 — only equivocation removes a key now. |
 | **Slashed** | Stake burned for provable cheating (signing twice at one height) |
 | **Tombstoned** | That key is banned forever. Double-signing only. |
 | **Equivocation** | Signing two different blocks/votes at the same height |
@@ -397,14 +397,17 @@ sudo systemctl restart ssh
 Ed25519 today, with an optional ML-DSA-65 co-signature path for post-quantum safety —
 see the architecture doc in inazuma-core.
 
-## 12. Penalties: jailing and slashing
+## 12. Penalties: slashing (downtime no longer jails)
 
 Enforcement activates at block **130,000**, so all earlier history replays unchanged.
+Downtime jailing was **retired at block 1,400,000**: like Ethereum, being offline
+costs you the rewards for the slots you missed and nothing else. You keep your seat,
+existing downtime jails became inert at the fork, and there is nothing to unjail.
 
 | Offence | How it's detected | Penalty |
 | --- | --- | --- |
 | **Equivocation** — two blocks or precommits at one height | evidence verified against your own signatures | burn `max(5%, 3 x stake share)`, **permanent tombstone** |
-| **Downtime** — 50 consecutive missed leader slots | counted on chain | jailed 10,000 blocks (~1 h), **no burn**; repeats burn 0.1% |
+| **Downtime** — missed leader slots (offline, behind, laptop asleep) | counted on chain | **no jail, no burn** — lost rewards only |
 | **Invalid block / bad state root** | peers reject it; never finalises | no burn, slot counted as missed |
 
 Worked example: a validator holding 20% of stake double-signs. `3 x 20% = 60%`, above the
@@ -416,12 +419,12 @@ valid for 100,000 blocks and unbonding takes 300, so stake cannot outrun a pendi
 
 ```bash
 inazuma report --evidence ./evidence.json
-inazuma unjail --key "$INAZ_KEY"     # after the jail height passes
+inazuma unjail --key "$INAZ_KEY"     # legacy: pre-1,400,000 jails only
 ```
 
-**Downtime never burns stake on a first offence.** The realistic worst case for an honest
-operator is one lost hour of rewards. The only way to lose real money is running one key
-twice. Full detail: [docs/slashing.md](docs/slashing.md).
+**Downtime never burns stake and never jails.** The realistic worst case for an honest
+operator is the rewards for the minutes it was offline. The only way to lose real money
+is running one key on two machines. Full detail: [docs/slashing.md](docs/slashing.md).
 
 ## 13. Leaving the validator set
 
@@ -430,9 +433,9 @@ inazuma unstake --key "$INAZ_KEY" --amount 1000   # spendable after 300 blocks (
 sudo systemctl disable --now inazuma              # stop the node once unbonded
 ```
 
-Unbond **before** shutting down, or you will accumulate missed slots and get jailed while
-still bonded. Keep the key backup even after leaving — it is the account that holds the
-returned stake.
+Unbond **before** shutting down for good — a bonded, offline validator is not punished,
+but it earns nothing. Keep the key backup even after leaving — it is the account that
+holds the returned stake.
 
 ## 14. Replicas and public RPC
 
@@ -503,7 +506,7 @@ On the server, after install:
 | `state root mismatch` at a low height | wrong `genesis.json` | re-`init` with network genesis into a **clean** data dir |
 | no peers after 60 s | 9944 closed, or wrong `--peers` | `sudo ufw allow 9944/tcp`, check the seed address |
 | missed-slot streak growing | node behind, or slow disk | check lag with `inazuma status`; move to local NVMe |
-| jailed | 50 missed slots in a row | fix the node, wait out the jail height, `inazuma unjail` |
+| missed slots, no rewards | node offline or behind (no jail since 1,400,000) | bring the node back and let it sync; rewards resume automatically |
 | `nonce too low` when sending | stale pending nonce | read `pendingNonce` from `inaz_getAccount` |
 | service dies on boot | `EnvironmentFile` missing/unreadable | `sudo chmod 600 /etc/inazuma/validator.env`, `daemon-reload` |
 | `cargo: command not found` | Rust env not sourced | `. "$HOME/.cargo/env"` or re-login |

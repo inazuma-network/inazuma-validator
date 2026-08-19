@@ -5,7 +5,7 @@ inazuma status         # height, sync state, missed-slot streak
 inazuma validators     # active set, stake shares, next leader
 inazuma slashing       # params, jail state, slash history
 inazuma unstake --key <SECRET_HEX> --amount 1000
-inazuma unjail  --key <SECRET_HEX>
+inazuma unjail  --key <SECRET_HEX>   # legacy: pre-1,400,000 downtime jails only
 ```
 
 Watch three things; the rest is noise:

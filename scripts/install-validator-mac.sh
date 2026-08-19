@@ -10,7 +10,8 @@
 #   config  ~/.inazuma/genesis.json, ~/.inazuma/validator.env (mode 600)
 #   service ~/Library/LaunchAgents/network.inazuma.node.plist (launchd)
 #
-# NOTE: a laptop sleeps and changes networks. Missed slots get you jailed.
+# NOTE: a laptop sleeps and changes networks. Missed slots cost rewards only --
+# downtime stopped jailing at block 1,400,000.
 # Use this for development and read-replicas; run production validators on a
 # Linux server with a static IP.
 # ---------------------------------------------------------------------------
@@ -128,5 +129,5 @@ cat <<TXT
 
   Track your node at https://inazuma.network/validators
   Reminder: keep the Mac awake (System Settings -> Lock Screen -> never sleep)
-  or you will miss slots and get jailed.
+  or you will miss slots and earn no rewards (no jail, no burn).
 TXT

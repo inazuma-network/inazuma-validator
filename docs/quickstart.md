@@ -17,7 +17,7 @@ application.
 | Stake / bond | INAZ you lock so the network can punish you |
 | Slot | Your turn to produce a block |
 | Missed slot | Your turn came and your node didn't produce |
-| Jailed | Benched after too many missed slots. No stake burned. |
+| Jailed | Legacy state — downtime jailing was retired at block 1,400,000. Only double-signing removes a key. |
 | Slashed | Stake burned for provable cheating |
 | Tombstoned | Key banned forever — double-signing only |
 | Unbonding | 300-block wait before withdrawn stake is spendable |
@@ -76,7 +76,7 @@ sudo cp genesis.json /etc/inazuma/genesis.json
 inazuma init --data /var/lib/inazuma --genesis /etc/inazuma/genesis.json
 ```
 
-Sync before you stake — a validator elected while syncing gets jailed:
+Sync before you stake — a validator elected while syncing just misses slots and earns nothing:
 
 ```bash
 inazuma run --data /var/lib/inazuma --genesis /etc/inazuma/genesis.json \

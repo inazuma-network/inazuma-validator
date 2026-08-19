@@ -59,7 +59,8 @@ launchctl load   ~/Library/LaunchAgents/network.inazuma.node.plist   # start
 ```
 
 A laptop sleeps, switches Wi-Fi and reboots for updates. Each of those is a missed-slot
-streak, and 50 in a row is a jailing. Keep real stake on Linux; disable sleep
+streak. Since block 1,400,000 that no longer jails or burns — you simply earn
+nothing while asleep. Keep real stake on Linux; disable sleep
 (System Settings → Lock Screen) if you insist on staking from a Mac.
 
 ## Windows 10/11
